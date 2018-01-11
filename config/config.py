@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #Host
-IP='172.28.0.214'
+IP='172.28.0.218'
 #API monitor
 USER = 'monitor'
 PASSWD = 'iptv13579'

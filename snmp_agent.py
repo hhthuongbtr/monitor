@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
-import smtplib
-import urllib, json
+import requests, json
+from requests.auth import HTTPBasicAuth
 
 #Execute bash shell command
 def execute_command(cmd):
@@ -24,12 +24,12 @@ else:
     exit(1)
 
 #get snmp API
-response = urllib.urlopen(api+"profile_agent/snmp/"+ip)
-if response.getcode()==200:
+response = requests.get(URL+"profile_agent/snmp/"+IP, auth=HTTPBasicAuth("monitor", "iptv13579"), timeout=5)
+if response.status_code==200:
     #Refesh snmp file
     write_null()
     #write snmp file
-    profile_agents = json.loads(response.read())
+    profile_agents = response.json()
     for profile_agent in profile_agents['profile_agent_snmp']:
         #Agent_IPTV_Status
         if profile_agent['monitor']==1:
@@ -47,3 +47,4 @@ if response.getcode()==200:
             execute_command(cmd)
             cmd="echo '%s' >> /monitor/snmp/analyzer/channel_status"%(profile_agent['analyzer_status'])
             execute_command(cmd)
+
