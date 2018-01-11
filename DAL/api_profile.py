@@ -10,8 +10,7 @@ class Profile:
         return rsp
 
     def put(self, id, data):
-    	url = self.api.profile_agent_url + str(id) + "/"
-    	print url
+        url = self.api.profile_agent_url + str(id) + "/"
         rsp = self.api.put(url, data)
         return rsp
 

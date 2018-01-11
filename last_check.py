@@ -39,11 +39,15 @@ def check_source(source, last_status, id, name, type):
             """
             profile = ProfileBLL()
             profile_data = {"status": check}
-            rsp = profile.put(id, profile_data)
+            child_thread = threading.Thread(target=profile.put, args=(id, profile_data,))
+            child_thread.start()
+            #rsp = profile.put(id, profile_data)
             message = """%s %s (ip:%s) status %s in host: %s""" % (name, type, source, status, ip)
             log_data = {"host": source, "tag": "status", "msg": message}
             log = LogBLL()
-            log.post(log_data)
+            child_thread = threading.Thread(target=log.post, args=(log_data,))
+            child_thread.start()
+            #log.post(log_data)
             return 1
     return 0
             

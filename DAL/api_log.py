@@ -4,8 +4,7 @@ class Log:
     def __init__(self):
         self.api = ApiMonitor()
     def post(self, data):
-    	url = self.api.log_url
-    	print url
+        url = self.api.log_url
         rsp = self.api.post(url, data)
         return rsp
 
