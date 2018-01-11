@@ -9,6 +9,7 @@ class ApiMonitor:
         self.agent_url = config.URL_AGENT
         self.log_url = config.URL_LOG
         self.profile_agent_url = config.URL_PROFILE_AGENT
+        self.snmp_url = config.URL_SNMP
 
     def get(self, url):
         try:

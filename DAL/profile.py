@@ -15,3 +15,9 @@ class Profile:
         rsp = self.api.put(url, data)
         return rsp
 
+class Snmp:
+    def __init__(self):
+        self.api = ApiMonitor()
+    def get(self):
+        rsp = self.api.get(self.api.snmp_url)
+        return rsp

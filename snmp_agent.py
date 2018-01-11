@@ -1,50 +1,67 @@
 #!/usr/bin/python
 import os
-import requests, json
-from requests.auth import HTTPBasicAuth
+from BLL.profile import Snmp as SnmpBLL
 
-#Execute bash shell command
-def execute_command(cmd):
-    os.system(cmd)
+class Snmp:
+    def execute_command(self, cmd):
+        """
+        Execute bash shell command
+        """
+        os.system(cmd)
 
-def write_null():
-    execute_command("cat /dev/null > /monitor/snmp/agent/channel_name")
-    execute_command("cat /dev/null > /monitor/snmp/agent/channel_status")
-    execute_command("cat /dev/null > /monitor/snmp/agent/channel_profile")
-    execute_command("cat /dev/null > /monitor/snmp/analyzer/channel_name")
-    execute_command("cat /dev/null > /monitor/snmp/analyzer/channel_status")
-    execute_command("cat /dev/null > /monitor/snmp/analyzer/channel_profile")
+    def write_null(self):
+        self.execute_command("cat /dev/null > /monitor/snmp/agent/channel_name")
+        self.execute_command("cat /dev/null > /monitor/snmp/agent/channel_status")
+        self.execute_command("cat /dev/null > /monitor/snmp/agent/channel_profile")
+        self.execute_command("cat /dev/null > /monitor/snmp/analyzer/channel_name")
+        self.execute_command("cat /dev/null > /monitor/snmp/analyzer/channel_status")
+        self.execute_command("cat /dev/null > /monitor/snmp/analyzer/channel_profile")
 
-#read config file
-configfile='/monitor/config/config.py'
-if os.path.exists(configfile):
-    execfile(configfile)
-else:
-    print "can't read file config"
-    exit(1)
+    def get_data(self):
+        """
+        get snmp API
+        """
+        snmpbll = SnmpBLL()
+        data = snmpbll.get()
+        print data
+        if data['status'] == 200:
+            return data['data']['profile_agent_snmp']
+        else:
+            print data['message']
+            exit(1)
 
-#get snmp API
-response = requests.get(URL+"profile_agent/snmp/"+IP, auth=HTTPBasicAuth("monitor", "iptv13579"), timeout=5)
-if response.status_code==200:
-    #Refesh snmp file
-    write_null()
-    #write snmp file
-    profile_agents = response.json()
-    for profile_agent in profile_agents['profile_agent_snmp']:
-        #Agent_IPTV_Status
-        if profile_agent['monitor']==1:
-            cmd="echo '%s-%s' >> /monitor/snmp/agent/channel_name"%(profile_agent['name'],profile_agent['type'])
-            execute_command(cmd)
-            cmd="echo '%s' >> /monitor/snmp/agent/channel_profile"%(profile_agent['ip'])
-            execute_command(cmd)
-            cmd="echo '%s' >> /monitor/snmp/agent/channel_status"%(profile_agent['status'])
-            execute_command(cmd)
-        #Agent_IPTV_Analyzer
-        if profile_agent['analyzer']==1:
-            cmd="echo '%s-%s' >> /monitor/snmp/analyzer/channel_name"%(profile_agent['name'],profile_agent['type'])
-            execute_command(cmd)
-            cmd="echo '%s' >> /monitor/snmp/analyzer/channel_profile"%(profile_agent['ip'])
-            execute_command(cmd)
-            cmd="echo '%s' >> /monitor/snmp/analyzer/channel_status"%(profile_agent['analyzer_status'])
-            execute_command(cmd)
+    def create_snmp_file(self):
+        profile_list = self.get_data()
+        if not profile_list:
+            print "Snmp data empty!"
+            return 1
+        """
+        Refesh snmp file
+        """
+        self.write_null()
+        """
+        Make SNMP content
+        """
+        for profile in profile_list:
+            #Agent_IPTV_Status
+            if profile['monitor'] == 1:
+                cmd="echo '%s-%s' >> /monitor/snmp/agent/channel_name"%(profile['name'],profile['type'])
+                self.execute_command(cmd)
+                cmd="echo '%s' >> /monitor/snmp/agent/channel_profile"%(profile['ip'])
+                self.execute_command(cmd)
+                cmd="echo '%s' >> /monitor/snmp/agent/channel_status"%(profile['status'])
+                self.execute_command(cmd)
+            #Agent_IPTV_Analyzer
+            if profile['analyzer'] == 1:
+                cmd="echo '%s-%s' >> /monitor/snmp/analyzer/channel_name"%(profile['name'],profile['type'])
+                self.execute_command(cmd)
+                cmd="echo '%s' >> /monitor/snmp/analyzer/channel_profile"%(profile['ip'])
+                self.execute_command(cmd)
+                cmd="echo '%s' >> /monitor/snmp/analyzer/channel_status"%(profile['analyzer_status'])
+                self.execute_command(cmd)
+        return 0
+
+if __name__ == "__main__":
+    snmp = Snmp()
+    snmp.create_snmp_file()
 
