@@ -7,7 +7,7 @@ class Ffmpeg:
     def check_source(self, source):
         cmnd = ['/usr/local/bin/ffprobe', source, '-v', 'quiet' , '-show_format', '-show_streams']
         p = subprocess.Popen(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        timeout = 30
+        timeout = 15
         i = 0
         while p.poll() is None:
             time.sleep(1)

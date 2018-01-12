@@ -18,9 +18,9 @@ def check_source(source, last_status, id, thread, name, type):
     check = ffmpeg.check_source(source)
     print "%s : %s"%(check,last_status)
     if check != last_status:
-        tmp="""{"source":"%s","status":%s,"pa_id":%s,"thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, thread, name, type)
+        json_data = """{"source":"%s","status":%s,"pa_id":%s,"thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, thread, name, type)
         file = File()
-        file.append(tmp)
+        file.append(json_data)
 
 ###############################################################################
 #                                                                             #
@@ -38,6 +38,7 @@ if __name__ == "__main__":
             print "Error code: " + str(data["status"])
             print data["message"]
             exit(1)
+        # ancestor_thread_list = []
         for profile in profile_list:
             while threading.activeCount() > profile['thread']:
                 time.sleep(1)
@@ -51,10 +52,14 @@ if __name__ == "__main__":
                 )
             )
             t.start()
+        #     ancestor_thread_list.append(t)
+        # """
+        # Wait for all threads finish
+        # """
+        # for ancestor_thread in ancestor_thread_list:
+        #     ancestor_thread.join()
     except Exception as e:
         print e
     finally:
-        #Wait for all threads finish
-        time.sleep(30)
-
+        time.sleep(20)
 

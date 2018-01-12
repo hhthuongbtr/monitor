@@ -64,7 +64,7 @@ def check_source(source, last_status, id, name, type):
 #                                                                             #
 ###############################################################################
 if __name__ == "__main__":
-    ancestor_thread_list = []
+    # ancestor_thread_list = []
     file = File()
     profile_list = file.read()
     profile_list = profile_list[0:len(profile_list)-1]
@@ -81,7 +81,8 @@ if __name__ == "__main__":
                 )
             )
             t.start()
-            ancestor_thread_list.append(t)
-    for ancestor_thread in ancestor_thread_list:
-        ancestor_thread.join()
+        time.sleep(30)
+    #         ancestor_thread_list.append(t)
+    # for ancestor_thread in ancestor_thread_list:
+    #     ancestor_thread.join()
     time.sleep(5)
