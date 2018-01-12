@@ -1,6 +1,8 @@
 #!/usr/bin/python
 #Host
 IP='172.28.0.218'
+#re check break time (second)
+BREAK_TIME = 15
 #API monitor
 USER = 'monitor'
 PASSWD = 'iptv13579'
@@ -12,3 +14,4 @@ DATABASE_PORT = 3306
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'root'
 DATABASE_NAME = 'monitor'
+

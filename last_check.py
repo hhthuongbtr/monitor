@@ -5,7 +5,7 @@ import threading
 from utils.file import File
 from utils.ffmpeg import Ffmpeg
 from BLL.log import Log as LogBLL
-from config.config import IP as ip
+from config.config import IP as ip, BREAK_TIME as break_time
 from BLL.profile import Profile as ProfileBLL
 
 def check_source(source, last_status, id, name, type):
@@ -21,7 +21,7 @@ def check_source(source, last_status, id, name, type):
     check = ffmpeg.check_source(source)
     print "%s : %s"%(check, last_status)
     if check != last_status:
-        time.sleep(30)
+        time.sleep(break_time)
         recheck = ffmpeg.check_source(source)
         if recheck == check:
             if check == 1:
