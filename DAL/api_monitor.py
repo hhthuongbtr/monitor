@@ -6,10 +6,10 @@ from config import config
 
 class ApiMonitor:
     def __init__(self):
-        self.agent_url = config.URL_AGENT
-        self.log_url = config.URL_LOG
-        self.profile_agent_url = config.URL_PROFILE_AGENT
-        self.snmp_url = config.URL_SNMP
+        self.agent_url = config.URL + 'agent/'
+        self.log_url = config.URL + 'log/'
+        self.profile_agent_url = config.URL + 'profile_agent/'
+        self.snmp_url = config.URL + "profile_agent/snmp/" + config.IP
 
     def get(self, url):
         message = "Unknow"
