@@ -8,7 +8,7 @@ from BLL.log import Log as LogBLL
 from config.config import IP as ip, BREAK_TIME as break_time
 from BLL.profile import Profile as ProfileBLL
 
-def check_source(source, last_status, id, name, type):
+def check_source(source, last_status, id, agent, name, type):
     """
     Get status of profile, if stastus not change then update check equal 1.      
     Ffmpeg: Use Ffprobe to check stastus profile (source) and return flag 
@@ -39,11 +39,11 @@ def check_source(source, last_status, id, name, type):
             """
             child_thread_list = []
             profile = ProfileBLL()
-            profile_data = {"status": check}
+            profile_data = {"status": check, "agent": agent, "ip": ip}
             child_thread = threading.Thread(target=profile.put, args=(id, profile_data,))
             child_thread.start()
             child_thread_list.append(child_thread)
-            message = """%s %s (ip:%s) status %s in host: %s""" % (name, type, source, status, ip)
+            message = """%s %s (ip:%s) status %s in host: %s""" % (name, type, source, status, agent)
             log_data = {"host": source, "tag": "status", "msg": message}
             log = LogBLL()
             child_thread = threading.Thread(target=log.post, args=(log_data,))
@@ -76,6 +76,7 @@ if __name__ == "__main__":
             t = threading.Thread(target=check_source,args=(profile['source'],
                 profile['status'],
                 profile['pa_id'],
+                profile['agent'],
                 profile['name'],
                 profile['type'],
                 )

@@ -5,8 +5,7 @@ from database_monitor import Database
 class Profile:
     def __init__(self):
         self.db = Database()
-    def parse_profile_data_table_to_json_array(self, profile_list):
-        agent = {}
+    def parse_profile_data_table_to_array(self, profile_list):
         args = []
         for profile in profile_list:
             args.append({ 
@@ -14,18 +13,18 @@ class Profile:
                             'ip'            : profile[1] if profile[1] else "",
                             'protocol'      : profile[2] if profile[2] else 'udp',
                             'status'        : profile[3] if profile[3] else 0,
-                            'thread'        : profile[4] if profile[4] else 10,
-                            'name'          : profile[5] if profile[5] else None,
-                            'type'          : profile[6] if profile[6] else None
+                            'agent'         : profile[4] if profile[4] else "",
+                            'thread'        : profile[5] if profile[5] else 10,
+                            'name'          : profile[6] if profile[6] else "",
+                            'type'          : profile[7] if profile[7] else None
                         })
-        agent["agent"] = args
-        return agent
+        return args
 
     def get(self):
         http_status_code = 500
         message = "Unknow"
         data = None
-        sql = """select pa.id,p.ip,p.protocol,pa.status,a.thread,c.name,p.type
+        sql = """select pa.id, p.ip, p.protocol, pa.status, a.name as agent, a.thread, c.name, p.type
                 from profile as p, agent as a, profile_agent as pa,channel as c 
                 where a.ip='%s' and a.active=1 and pa.monitor=1 and p.channel_id=c.id and pa.profile_id=p.id and pa.agent_id=a.id"""%(ip)
         status, message, data_table = self.db.execute_query(sql)
@@ -36,7 +35,7 @@ class Profile:
         if status == 0:
             http_status_code = 200
             message = message
-            data = self.parse_profile_data_table_to_json_array(data_table)
+            data = self.parse_profile_data_table_to_array(data_table)
         json_response = {"status": http_status_code, "message": message, "data": data}
         json_response = json.dumps(json_response)
         json_response = json.loads(json_response)
@@ -52,6 +51,10 @@ class Profile:
             http_status_code = 400
             message = "Invalid status value."
             data = None
+            json_response = {"status": http_status_code, "message": message, "data": data}
+            json_response = json.dumps(json_response)
+            json_response = json.loads(json_response)
+            return json_response
         sql = """update profile_agent set status = %s, last_update=unix_timestamp() where id=%s"""%(status, id)
         status, message, data_table = self.db.execute_non_query(sql)
         if status == 1:
@@ -71,8 +74,7 @@ class Snmp:
     def __init__(self):
         self.db = Database()
 
-    def parse_profile_data_table_to_json_array(self, profile_list):
-        agent = {}
+    def parse_profile_data_table_to_array(self, profile_list):
         args = []
         for profile in profile_list:
             args.append({ 
@@ -85,8 +87,7 @@ class Snmp:
                             'analyzer'               : profile[6] if profile[6] else 0,
                             'analyzer_status'        : profile[7] if profile[7] else 0,
                         })
-        agent["profile_agent_snmp"] = args
-        return agent        
+        return args        
 
     def get(self):
         http_status_code = 500
@@ -104,7 +105,7 @@ class Snmp:
         if status == 0:
             http_status_code = 200
             message = message
-            data = self.parse_profile_data_table_to_json_array(profile_list = data_table)
+            data = self.parse_profile_data_table_to_array(profile_list = data_table)
         json_response = {"status": http_status_code, "message": message, "data": data}
         json_response = json.dumps(json_response)
         json_response = json.loads(json_response)

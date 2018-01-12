@@ -1,5 +1,4 @@
 import MySQLdb as mdb
-import json
 from config import config
 
 class Database:
@@ -42,7 +41,7 @@ class Database:
     '''SELECT'''
     def execute_query(self, query):
         if not query:
-            status = 0
+            status = 1
             message = "No query"
             data = None
             return status, message, data
@@ -54,10 +53,10 @@ class Database:
             self.close_connect(session)
             status = 0
             message = "Ok"
-            return status, message, data_table
+            data = data_table
+            return status, message, data
         except Exception as e:
             status = 1
             message = str(e)
             data = None
             return status, message, data
-

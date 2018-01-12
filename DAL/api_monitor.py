@@ -28,6 +28,7 @@ class ApiMonitor:
             message = "OK"
             try:
                 data = rsp.json()
+                data = data['data']
             except:
                 data = None
             status = rsp.status_code

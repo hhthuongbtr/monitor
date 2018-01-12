@@ -9,13 +9,19 @@ class Log:
         http_status_code = 500
         message = "Unknow"
         data = None
-        if len(json_data) == 3 and ('host' and 'tag' and 'msg' in json_data):
-            sql="insert into logs(host,tag,datetime,msg) values('%s','%s', NOW(),'%s');"%(json_data['host'],json_data['tag'],json_data['msg'])
-        else:
+        try:
+            host = json_data['host']
+            tag = json_data['tag']
+            msg = json_data['msg']
+        except:
             http_status_code = 500
             message = "Only acept fields: host, tag, msg"
             data = None
-            status = -1
+            json_response = {"status": http_status_code, "message": message, "data": data}
+            json_response = json.dumps(json_response)
+            json_response = json.loads(json_response)
+            return json_response
+        sql="insert into logs(host,tag,datetime,msg) values('%s','%s', NOW(),'%s');"%(host, tag, msg)
         status, message, data_table = self.db.execute_non_query(sql)
         if status == 1:
             http_status_code = 500

@@ -5,7 +5,7 @@ from utils.ffmpeg import Ffmpeg
 from utils.file import File
 from BLL.profile import Profile as ProfileBLL
 
-def check_source(source, last_status, id, thread, name, type):
+def check_source(source, last_status, id, agent, thread, name, type):
     """
     Get status of profile, if stastus not change then update check equal 1.      
     Ffmpeg: Use Ffprobe to check stastus profile (source) and return flag 
@@ -18,7 +18,7 @@ def check_source(source, last_status, id, thread, name, type):
     check = ffmpeg.check_source(source)
     print "%s : %s"%(check,last_status)
     if check != last_status:
-        json_data = """{"source":"%s","status":%s,"pa_id":%s,"thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, thread, name, type)
+        json_data = """{"source":"%s","status":%s,"pa_id":%s,"agent": %s,thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, agent, thread, name, type)
         file = File()
         file.append(json_data)
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         profileBLL = ProfileBLL()
         data = profileBLL.get()
         if data["status"] == 200:
-            profile_list = data["data"]["agent"]
+            profile_list = data["data"]
         else:
             print "Error code: " + str(data["status"])
             print data["message"]
@@ -46,6 +46,7 @@ if __name__ == "__main__":
                 args=(profile['protocol']+'://'+profile['ip'],
                     profile['status'],
                     profile['id'],
+                    profile['agent'],
                     profile['thread'],
                     profile['name'],
                     profile['type'],

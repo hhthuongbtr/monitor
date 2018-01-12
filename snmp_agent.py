@@ -25,7 +25,7 @@ class Snmp:
         data = snmpbll.get()
         print data
         if data['status'] == 200:
-            return data['data']['profile_agent_snmp']
+            return data['data']
         else:
             print data['message']
             exit(1)
