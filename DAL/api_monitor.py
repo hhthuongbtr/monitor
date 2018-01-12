@@ -41,7 +41,7 @@ class ApiMonitor:
             status = rsp.status_code
         json_response = {"status": status, "message": message, "data": data}
         json_response = json.dumps(json_response)
-        return json.loads(json.loads(json.loads(json_response)))
+        return json.loads(json_response)
 
     def put(self, url, data):
         message = "Unknow"
