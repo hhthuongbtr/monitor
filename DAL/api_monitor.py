@@ -5,11 +5,11 @@ from requests.auth import HTTPBasicAuth
 from config import config
 
 class ApiMonitor:
-    def __init__(self):
-        self.agent_url = config.URL + 'agent/'
-        self.log_url = config.URL + 'log/'
-        self.profile_agent_url = config.URL + 'profile_agent/'
-        self.snmp_url = config.URL + "profile_agent/snmp/" + config.IP
+    def __init__(self, api_url):
+        self.agent_url = api_url + "agent/"
+        self.log_url = api_url + "log/"
+        self.profile_agent_url = api_url + "profile_agent/"
+        self.snmp_url = api_url + "profile_agent/snmp/" + config.IP
 
     def get(self, url):
         message = "Unknow"

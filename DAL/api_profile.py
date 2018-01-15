@@ -2,8 +2,8 @@ from api_monitor import ApiMonitor
 from config.config import IP as ip
 
 class Profile:
-    def __init__(self):
-        self.api = ApiMonitor()
+    def __init__(self, api_url):
+        self.api = ApiMonitor(api_url)
 
     def get(self):
         rsp = self.api.get(self.api.profile_agent_url + ip + "/")
@@ -15,8 +15,8 @@ class Profile:
         return rsp
 
 class Snmp:
-    def __init__(self):
-        self.api = ApiMonitor()
+    def __init__(self, api_url):
+        self.api = ApiMonitor(api_url)
     def get(self):
         rsp = self.api.get(self.api.snmp_url)
         return rsp

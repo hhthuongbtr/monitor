@@ -1,15 +1,33 @@
 from DAL.api_agent import Agent as ApiAgentDAL
 from DAL.database_agent import Agent as DbAgentDAL
-from config.config import DEFINE_DATABASE_BACKUP as is_backup
+from config import config
 
 class Agent:
     def __init__(self):
-        self.agent_api = ApiAgentDAL()
-        self.agent_db = DbAgentDAL()
+        self.master_api = ApiAgentDAL(config.MATSER_API)
     def put(self, data):
-        rsp = self.agent_api.put(data)
-        if rsp["status"] == 202:
-            return rsp
-        if is_backup:
-            return self.agent_db.put(data)
-        return rsp
+        http_master_rsp = self.master_api.put(data)
+        if http_master_rsp["status"] == 202:
+            return http_master_rsp
+        eror = "Master Api: " + http_master_rsp["message"] + "\n"
+
+        if config.DEFINE_SLAVE_API:
+            slave_api = ApiAgentDAL(config.SLAVE_API)
+            http_slave_rsp = slave_api.put(data)
+            if http_slave_rsp["status"] == 202:
+                print eror
+                return http_slave_rsp
+            else:
+                eror += "Slave Api: " + http_slave_rsp["message"] + "\n"
+
+        if config.DEFINE_DATABASE_BACKUP:
+            master_db = DbAgentDAL()
+            db_rsp = master_db.put(data)
+            if db_rsp["status"] == 202:
+                print eror
+                return db_rsp
+            else:
+                eror += "Database: " + db_rsp["message"] + "\n"
+        print eror
+        return http_master_rsp
+

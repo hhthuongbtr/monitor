@@ -54,9 +54,9 @@ if __name__ == "__main__":
             )
             t.start()
         #     ancestor_thread_list.append(t)
-        # """
+        # 
         # Wait for all threads finish
-        # """
+        # 
         # for ancestor_thread in ancestor_thread_list:
         #     ancestor_thread.join()
     except Exception as e:
