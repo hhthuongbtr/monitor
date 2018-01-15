@@ -4,7 +4,7 @@ from config import config
 
 class Agent:
     def __init__(self):
-        self.master_api = ApiAgentDAL(config.MATSER_API)
+        self.master_api = ApiAgentDAL(config.MASTER_API)
     def put(self, data):
         http_master_rsp = self.master_api.put(data)
         if http_master_rsp["status"] == 202:

@@ -6,7 +6,7 @@ from config import config
 
 class Profile:
     def __init__(self):
-        self.master_api = ApiProfileDAL(config.MATSER_API)
+        self.master_api = ApiProfileDAL(config.MASTER_API)
 
     def get(self):
         http_master_rsp = self.master_api.get()
@@ -62,7 +62,7 @@ class Profile:
 
 class Snmp:
     def __init__(self):
-        self.master_api = ApiSnmpDAL(config.MATSER_API)
+        self.master_api = ApiSnmpDAL(config.MASTER_API)
 
     def get(self):
         http_master_rsp = self.master_api.get()

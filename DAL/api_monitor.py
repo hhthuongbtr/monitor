@@ -44,12 +44,12 @@ class ApiMonitor:
         json_response = json.dumps(json_response)
         return json.loads(json_response)
 
-    def put(self, url, data):
+    def put(self, url, json_data):
         message = "Unknow"
         data = None
         status = 500
         try:
-            rsp = requests.put(url, json = data, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
+            rsp = requests.put(url, json = json_data, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
         except ConnectionError as e:
             message = str(e)
             data = None
@@ -80,12 +80,12 @@ class ApiMonitor:
         json_response = json.dumps(json_response)
         return json.loads(json_response)
 
-    def post(self, url, data):
+    def post(self, url, json_data):
         message = "Unknow"
         data = None
         status = 500
         try:
-            rsp = requests.post(url, json = data, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
+            rsp = requests.post(url, json = json_data, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
         except ConnectionError as e:
             message = str(e)
             data = None

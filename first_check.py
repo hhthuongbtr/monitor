@@ -16,9 +16,9 @@ def check_source(source, last_status, id, agent, thread, name, type):
     """
     ffmpeg = Ffmpeg()
     check = ffmpeg.check_source(source)
-    print "%s : %s"%(check,last_status)
+    print "%s : %s"%(check, last_status)
     if check != last_status:
-        json_data = """{"source":"%s","status":%s,"pa_id":%s,"agent": %s,thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, agent, thread, name, type)
+        json_data = """{"source":"%s","status":%s,"pa_id":%s,"agent": "%s","thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, agent, thread, name, type)
         file = File()
         file.append(json_data)
 
