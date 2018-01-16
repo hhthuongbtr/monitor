@@ -25,15 +25,15 @@ def check_source(source, last_status, id, agent, name, type):
         recheck = ffmpeg.check_source(source)
         if recheck == check:
             if check == 1:
-                status = 'up'
+                status = "UP"
             elif check == 2:
-                status = 'video error'
+                status = "VIDEO ERROR"
             elif check == 3:
-                status = 'audio error'
+                status = "AUDIO ERROR"
             elif check == 0:
-                status = 'down'
+                status = "DOWN"
             else:
-                status = "unknown" + str(check) + ":"
+                status = "UNKNOW" + str(check) + ":"
             """
             Update status and write log
             """
@@ -43,7 +43,7 @@ def check_source(source, last_status, id, agent, name, type):
             child_thread = threading.Thread(target=profile.put, args=(id, profile_data,))
             child_thread.start()
             child_thread_list.append(child_thread)
-            message = """%s %s (ip:%s) status %s in host: %s""" % (name, type, source, status, agent)
+            message = """%s %s (ip:%s) status %s in host: %s (%s)""" % (name, type, source, status, agent, ip)
             log_data = {"host": source, "tag": "status", "msg": message}
             log = LogBLL()
             child_thread = threading.Thread(target=log.post, args=(log_data,))
