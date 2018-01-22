@@ -9,6 +9,10 @@ class Profile:
         rsp = self.api.get(self.api.profile_agent_url + ip + "/")
         return rsp
 
+    def get_video_check_list(self):
+        rsp = self.api.get(self.api.video_check_url)
+        return rsp
+
     def put(self, id, data):
         url = self.api.profile_agent_url + str(id) + "/"
         rsp = self.api.put(url, data)

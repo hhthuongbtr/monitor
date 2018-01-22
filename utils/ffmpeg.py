@@ -5,7 +5,8 @@ import os, sys, subprocess, shlex, re, fnmatch,signal
 
 class Ffmpeg:
     def check_source(self, source):
-        cmnd = ['/usr/local/bin/ffprobe', source, '-v', 'quiet' , '-show_format', '-show_streams']
+        from config.config import FFPROBE_PATH as ffprobe
+        cmnd = [ffprobe, source, '-v', 'quiet' , '-show_format', '-show_streams']
         p = subprocess.Popen(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         timeout = 15
         i = 0
@@ -34,6 +35,15 @@ class Ffmpeg:
             return 3
         return 0
 
-    def capture_image(self):
-        pass
+    def capture_image(self, source, file_patch):
+        from config.config import FFMPEG_PATH as ffmpeg
+        cmnd = [ffmpeg,'-timeout','30','-i', source, '-v', 'quiet','-r','1','-f','image2',file_patch,'-y']
+        p = subprocess.Popen(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        timeout = 15
+        i = 0
+        while p.poll() is None:
+            time.sleep(1)
+            i+=1
+            if i > timeout:
+                os.kill(p.pid, signal.SIGKILL)
 

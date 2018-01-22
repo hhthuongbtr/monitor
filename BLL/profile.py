@@ -33,6 +33,32 @@ class Profile:
                 eror += "Database: " + db_rsp["message"] + "\n"
         print eror
         return http_master_rsp
+        
+    def get_video_check_list(self):
+        http_master_rsp = self.master_api.get_video_check_list()
+        if http_master_rsp["status"] == 200:
+            return http_master_rsp
+        eror = "Master Api: " + http_master_rsp["message"] + "\n"
+
+        if config.DEFINE_SLAVE_API:
+            slave_api = ApiProfileDAL(config.SLAVE_API)
+            http_slave_rsp = slave_api.get_video_check_list()
+            if http_slave_rsp["status"] == 200:
+                print eror
+                return http_slave_rsp
+            else:
+                eror += "Slave Api: " + http_slave_rsp["message"] + "\n"
+
+        if config.DEFINE_DATABASE_BACKUP:
+            master_db = DbProfileDAL()
+            db_rsp = master_db.get_video_check_list()
+            if db_rsp["status"] == 200:
+                print eror
+                return db_rsp
+            else:
+                eror += "Database: " + db_rsp["message"] + "\n"
+        print eror
+        return http_master_rsp
 
     def put(self, id, data):
         http_master_rsp = self.master_api.put(id, data)

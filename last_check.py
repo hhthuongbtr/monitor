@@ -19,21 +19,12 @@ def check_source(source, last_status, id, agent, name, type):
     """
     ffmpeg = Ffmpeg()
     check = ffmpeg.check_source(source)
-    print "%s : %s"%(check, last_status)
+    # print "%s : %s"%(check, last_status)
     if check != last_status:
         time.sleep(break_time)
         recheck = ffmpeg.check_source(source)
         if recheck == check:
-            if check == 1:
-                status = "UP"
-            elif check == 2:
-                status = "VIDEO ERROR"
-            elif check == 3:
-                status = "AUDIO ERROR"
-            elif check == 0:
-                status = "DOWN"
-            else:
-                status = "UNKNOW" + str(check) + ":"
+            status = {0: "DOWN       ", 1: "UP         ", 2: "VIDEO ERROR", 3: "AUDIO ERROR"} [check]
             """
             Update status and write log
             """
@@ -43,7 +34,15 @@ def check_source(source, last_status, id, agent, name, type):
             child_thread = threading.Thread(target=profile.put, args=(id, profile_data,))
             child_thread.start()
             child_thread_list.append(child_thread)
-            message = """%s %s (ip:%s) status %s in host: %s (%s)""" % (name, type, source, status, agent, ip)
+            channel = """%s %s"""%(name, type)
+            while len(channel) < 22:
+                channel += " "
+            while len(source) < 27:
+                source += " "
+            ip_config = ip
+            while len(ip_config) < 16:
+                ip_config += " "
+            message = """%s (ip:%s) %s in host: %s (%s)""" % (channel, source, status, ip_config, agent)
             log_data = {"host": source, "tag": "status", "msg": message}
             log = LogBLL()
             child_thread = threading.Thread(target=log.post, args=(log_data,))
@@ -56,7 +55,6 @@ def check_source(source, last_status, id, agent, name, type):
                 child_thread.join()
             return 1
     return 0
-
 
 ###############################################################################
 #                                                                             #

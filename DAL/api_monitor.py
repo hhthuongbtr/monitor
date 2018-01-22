@@ -10,6 +10,7 @@ class ApiMonitor:
         self.log_url = api_url + "log/"
         self.profile_agent_url = api_url + "profile_agent/"
         self.snmp_url = api_url + "profile_agent/snmp/" + config.IP
+        self.video_check_url = api_url + "profile_agent/video_check/" + config.IP
 
     def get(self, url):
         message = "Unknow"
@@ -70,7 +71,10 @@ class ApiMonitor:
             status = rsp.status_code
         elif rsp.status_code == 400:
             message = "Bad request"
-            data = rsp.json()
+            try:
+                data = rsp.json()
+            except:
+                data = None
             status = rsp.status_code
         else:
             message = "Unknow"
