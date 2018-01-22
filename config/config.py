@@ -1,4 +1,6 @@
 #!/usr/bin/python
+SOURCE_MONITOR = True #(True/False)
+BLACK_SCREEN_MONITOR = False #(True/False)
 #Host
 IP='10.0.0.205'
 #re check break time (second)

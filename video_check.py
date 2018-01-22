@@ -11,7 +11,7 @@ import os, sys, shlex, re, fnmatch, signal
 from utils.ffmpeg import Ffmpeg
 from BLL.profile import Profile as ProfileBLL
 from BLL.log import Log as LogBLL
-from config.config import IP as ip
+from config.config import IP as ip, BREAK_TIME as break_time
 
 class CheckVideo:
     def __init__(self, id, name, type, protocol, source, last_status, last_video_status, agent):
@@ -85,7 +85,7 @@ class CheckVideo:
         rms = self.compare_two_images(histogram_previous, histogram_curent)
         if rms < 150:
             if int(self.last_video_status) == 1:
-                time.sleep(1)
+                time.sleep(break_time * 3)
                 histogram_recheck = self.get_histogram_curent_image()
                 rms = self.compare_two_images(histogram_curent, histogram_recheck)
                 if rms < 150:
@@ -94,7 +94,7 @@ class CheckVideo:
                     self.update_data(video_status, source_status)
         else:
             if int(self.last_video_status) == 0:
-                time.sleep(1)
+                time.sleep(break_time * 3)
                 histogram_recheck = self.get_histogram_curent_image()
                 rms = self.compare_two_images(histogram_curent, histogram_recheck)
                 if rms >= 200:

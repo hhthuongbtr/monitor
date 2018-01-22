@@ -4,6 +4,7 @@ import time
 from utils.ffmpeg import Ffmpeg
 from utils.file import File
 from BLL.profile import Profile as ProfileBLL
+from config.config import SOURCE_MONITOR as is_monitor
 
 def check_source(source, last_status, id, agent, thread, name, type):
     """
@@ -29,6 +30,9 @@ def check_source(source, last_status, id, agent, thread, name, type):
 ###############################################################################
 
 if __name__ == "__main__":
+    if not is_monitor:
+        print "Black screen monitor is disable, check your config!"
+        exit(0)
     try:
         profileBLL = ProfileBLL()
         data = profileBLL.get()

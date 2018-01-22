@@ -5,7 +5,7 @@ import threading
 from utils.file import File
 from utils.ffmpeg import Ffmpeg
 from BLL.log import Log as LogBLL
-from config.config import IP as ip, BREAK_TIME as break_time
+from config.config import IP as ip, BREAK_TIME as break_time, SOURCE_MONITOR as is_monitor
 from BLL.profile import Profile as ProfileBLL
 
 def check_source(source, last_status, id, agent, name, type):
@@ -62,6 +62,9 @@ def check_source(source, last_status, id, agent, name, type):
 #                                                                             #
 ###############################################################################
 if __name__ == "__main__":
+    if not is_monitor:
+        print "Black screen monitor is disable, check your config!"
+        exit(0)
     # ancestor_thread_list = []
     file = File()
     profile_list = file.read()
