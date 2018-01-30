@@ -10,13 +10,13 @@ class Profile:
         for profile in profile_list:
             args.append({ 
                             'id'            : profile[0] if profile[0] else None,
-                            'ip'            : profile[1] if profile[1] else "",
-                            'protocol'      : profile[2] if profile[2] else 'udp',
-                            'status'        : profile[3] if profile[3] else 0,
-                            'agent'         : profile[4] if profile[4] else "",
-                            'thread'        : profile[5] if profile[5] else 10,
-                            'name'          : profile[6] if profile[6] else "",
-                            'type'          : profile[7] if profile[7] else None
+                            'ip'            : profile[2] if profile[2] else "",
+                            'protocol'      : profile[3] if profile[3] else 'udp',
+                            'status'        : profile[4] if profile[4] else 0,
+                            'agent'         : profile[5] if profile[5] else "",
+                            'thread'        : profile[6] if profile[6] else 10,
+                            'name'          : profile[7] if profile[7] else "",
+                            'type'          : profile[8] if profile[8] else None
                         })
         return args
 
@@ -141,6 +141,7 @@ class Snmp:
                             'status'                 : profile[5] if profile[5] else 0,
                             'analyzer'               : profile[6] if profile[6] else 0,
                             'analyzer_status'        : profile[7] if profile[7] else 0,
+                            "video_status"           : profile[8] if profile[8] else 0
                         })
         return args        
 
@@ -148,7 +149,7 @@ class Snmp:
         http_status_code = 500
         message = "Unknow"
         data = None
-        sql = """select pa.id,c.name,p.ip,p.type,pa.monitor,pa.status,pa.analyzer,pa.analyzer_status 
+        sql = """select pa.id,c.name,p.ip,p.type,pa.monitor,pa.status,pa.analyzer,pa.analyzer_status, pa.video 
                 from profile as p, agent as a, profile_agent as pa,channel as c 
                 where a.ip='%s' and (pa.monitor=1 or pa.analyzer=1) and a.active=1 and p.channel_id=c.id and pa.profile_id=p.id and pa.agent_id=a.id 
                 order by c.name"""%(ip)

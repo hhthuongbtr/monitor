@@ -3,9 +3,11 @@ import logging
 import logging.config
 import json
  
-from .agent import Agent
-from .log import Log
-from .profile import Profile, Snmp
+from .first_check import FirstCheck
+from .last_check import LastCheck
+from .video_check import VideoCheck
+from .monitor import Monitor
+from .snmp_agent import Snmp
  
 # If applicable, delete the existing log file to generate a fresh log file during each execution
 if path.isfile("/var/log/python_logging.log"):
