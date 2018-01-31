@@ -1,10 +1,11 @@
 import json
-from config.config import IP as ip
+from config.config import SYSTEM
 from database_monitor import Database
 
 class Profile:
-    def __init__(self):
-        self.db = Database()
+    def __init__(self, database):
+        self.db = Database(database)
+        
     def parse_profile_data_table_to_array(self, profile_list):
         args = []
         for profile in profile_list:
@@ -27,7 +28,7 @@ class Profile:
         sql = """select pa.id, pa.last_update, p.ip, p.protocol, pa.status, a.name as agent, a.thread, c.name, p.type
                 from profile as p, agent as a, profile_agent as pa,channel as c 
                 where a.ip='%s' and a.active=1 and pa.monitor=1 and p.channel_id=c.id and pa.profile_id=p.id and pa.agent_id=a.id 
-                order by pa.last_update desc"""%(ip)
+                order by pa.last_update desc"""%(SYSTEM["HOST"])
         status, message, data_table = self.db.execute_query(sql)
         if status == 1:
             http_status_code = 500
@@ -66,7 +67,7 @@ class Profile:
         data = None
         sql = """select pa.id, p.ip, p.protocol, pa.status, a.thread, c.name, a.name as agent_name, p.type, pa.video 
             from profile as p, agent as a, profile_agent as pa, channel as c 
-            where a.ip = '%s' and a.active = 1 and pa.monitor = 1 and (pa.status = 1 or pa.video != 1) and pa.profile_id = p.id and pa.agent_id = a.id and p.channel_id = c.id"""%(ip)
+            where a.ip = '%s' and a.active = 1 and pa.monitor = 1 and (pa.status = 1 or pa.video != 1) and pa.profile_id = p.id and pa.agent_id = a.id and p.channel_id = c.id"""%(SYSTEM["HOST"])
         status, message, data_table = self.db.execute_query(sql)
         if status == 1:
             http_status_code = 500
@@ -127,7 +128,7 @@ class Profile:
 
 class Snmp:
     def __init__(self):
-        self.db = Database()
+        self.db = Database(database)
 
     def parse_profile_data_table_to_array(self, profile_list):
         args = []
@@ -152,7 +153,7 @@ class Snmp:
         sql = """select pa.id,c.name,p.ip,p.type,pa.monitor,pa.status,pa.analyzer,pa.analyzer_status, pa.video 
                 from profile as p, agent as a, profile_agent as pa,channel as c 
                 where a.ip='%s' and (pa.monitor=1 or pa.analyzer=1) and a.active=1 and p.channel_id=c.id and pa.profile_id=p.id and pa.agent_id=a.id 
-                order by c.name"""%(ip)
+                order by c.name"""%(SYSTEM["HOST"])
         status, message, data_table = self.db.execute_query(sql)
         if status == 1:
             http_status_code = 500

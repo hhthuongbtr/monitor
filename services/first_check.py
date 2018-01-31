@@ -6,7 +6,7 @@ import threading
 from utils.file import File
 from utils.ffmpeg import Ffmpeg
 from BLL.profile import Profile as ProfileBLL
-from config.config import SOURCE_MONITOR as is_monitor
+from config.config import SYSTEM
 
 class FirstCheck(object):
     """docstring for FirstCheck"""
@@ -35,7 +35,7 @@ class FirstCheck(object):
 
 
     def check(self):
-        if not is_monitor:
+        if not SYSTEM["monitor"]["SOURCE"]:
             message = "Black screen monitor is disable, check your config!"
             self.logger.warning(message)
             print message
@@ -44,7 +44,6 @@ class FirstCheck(object):
         try:
             profileBLL = ProfileBLL()
             data = profileBLL.get()
-            print data
             if data["status"] == 200:
                 profile_list = data["data"]
             else:

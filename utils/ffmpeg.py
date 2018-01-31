@@ -5,8 +5,8 @@ import os, sys, subprocess, shlex, re, fnmatch,signal
 
 class Ffmpeg:
     def check_source(self, source):
-        from config.config import FFPROBE_PATH as ffprobe
-        cmnd = [ffprobe, source, '-v', 'quiet' , '-show_format', '-show_streams']
+        from config.config import SYSTEM
+        cmnd = [SYSTEM["libery"]["FFPROBE"], source, '-v', 'quiet' , '-show_format', '-show_streams']
         p = subprocess.Popen(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         timeout = 15
         i = 0
@@ -36,8 +36,8 @@ class Ffmpeg:
         return 0
 
     def capture_image(self, source, file_patch):
-        from config.config import FFMPEG_PATH as ffmpeg
-        cmnd = [ffmpeg,'-timeout','30','-i', source, '-v', 'quiet','-r','1','-f','image2',file_patch,'-y']
+        from config.config import SYSTEM
+        cmnd = [SYSTEM["libery"]["FFMPEG"],'-timeout','30','-i', source, '-v', 'quiet','-r','1','-f','image2',file_patch,'-y']
         p = subprocess.Popen(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         timeout = 15
         i = 0

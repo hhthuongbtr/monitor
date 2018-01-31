@@ -1,14 +1,16 @@
 import MySQLdb as mdb
-from config import config
+from config.config import DATABASE
 
 class Database:
+    def __init__(self, database):
+        self.db = DATABASE[database]["NAME"]
+        self.user = DATABASE[database]["USER"]
+        self.password = DATABASE[database]["PASSWORD"]
+        self.host = DATABASE[database]["HOST"]
+        self.port = DATABASE[database]["PORT"]
+
     def connect(self):
-        db = config.DATABASE_NAME
-        user = config.DATABASE_USER
-        password = config.DATABASE_PASSWORD
-        host = config.DATABASE_HOST
-        port = config.DATABASE_PORT
-        return mdb.connect(host=host, port=port, user=user, passwd=password, db=db)
+        return mdb.connect(host=self.host, port=self.port, user=self.user, passwd=self.password, db=self.db)
 
     def close_connect(self, session):
         return session.close()

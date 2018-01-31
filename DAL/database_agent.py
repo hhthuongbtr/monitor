@@ -1,17 +1,17 @@
 import json
-from config.config import IP as ip
+from config.config import SYSTEM
 from database_monitor import Database
 
 class Agent:
-    def __init__(self):
-        self.db = Database()
+    def __init__(self, database):
+        self.db = Database(database)
 
     def put(self, json_data):
         http_status_code = 500
         message = "Unknow"
         data = None
         if len(json_data)==3 and('cpu' and 'mem' and 'disk' in json_data):
-            sql="update agent set cpu=%s,mem=%s,disk=%s,last_update=unix_timestamp() where ip='%s';"%(json_data['cpu'],json_data['mem'],json_data['disk'],ip)
+            sql="update agent set cpu=%s,mem=%s,disk=%s,last_update=unix_timestamp() where ip='%s';"%(json_data['cpu'],json_data['mem'],json_data['disk'],SYSTEM["HOST"])
         else:
             http_status_code = 500
             message = "Only acept fields: cpu, mem, disk"

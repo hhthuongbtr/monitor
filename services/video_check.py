@@ -12,7 +12,7 @@ import os, sys, shlex, re, fnmatch, signal
 from utils.ffmpeg import Ffmpeg
 from BLL.profile import Profile as ProfileBLL
 from BLL.log import Log as LogBLL
-from config.config import IP as ip, BREAK_TIME as break_time, BLACK_SCREEN_MONITOR as is_monitor
+from config.config import SYSTEM
 
 class VideoCheck(object):
     """docstring for VideoCheck"""
@@ -27,7 +27,7 @@ class VideoCheck(object):
         self.last_status = last_status
         self.last_video_status = last_video_status
         self.agent = agent
-        self.ip = ip
+        self.ip =SYSTEM["HOST"]
 
     def get_histogram_previous_image(self):
         if os.path.isfile(self.image_path):
@@ -90,7 +90,7 @@ class VideoCheck(object):
         self.logger.info("First check RMS :%d"%(rms))
         if rms < 150:
             if int(self.last_video_status) == 1:
-                time.sleep(break_time * 3)
+                time.sleep(SYSTEM["BREAK_TIME"] * 3)
                 histogram_recheck = self.get_histogram_curent_image()
                 rms = self.compare_two_images(histogram_curent, histogram_recheck)
                 self.logger.warning("Recheck RMS %s %s %s: %d"%(self.source, self.name, self.type, rms))
@@ -100,7 +100,7 @@ class VideoCheck(object):
                     self.update_data(video_status, source_status)
         else:
             if int(self.last_video_status) == 0:
-                time.sleep(break_time * 3)
+                time.sleep(SYSTEM["BREAK_TIME"] * 3)
                 histogram_recheck = self.get_histogram_curent_image()
                 rms = self.compare_two_images(histogram_curent, histogram_recheck)
                 self.logger.warning("Recheck RMS %s %s %s: %d"%(self.source, self.name, self.type, rms))
@@ -112,7 +112,7 @@ class VideoCheck(object):
 
 
     def check(self):
-        if not is_monitor:
+        if not SYSTEM["monitor"]["BLACK_SCREEN"]:
             message = "Black screen monitor is disable, check your config!"
             self.logger.warning(message)
             print message

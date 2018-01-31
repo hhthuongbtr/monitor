@@ -6,7 +6,7 @@ import threading
 from utils.file import File
 from utils.ffmpeg import Ffmpeg
 from BLL.log import Log as LogBLL
-from config.config import IP as ip, BREAK_TIME as break_time, SOURCE_MONITOR as is_monitor
+from config.config import SYSTEM
 from BLL.profile import Profile as ProfileBLL
 
 class LastCheck(object):
@@ -29,7 +29,7 @@ class LastCheck(object):
         # print "%s : %s"%(check, last_status)
         self.logger.info("Curent :%s <> Last: %s, %s %s %s"%(check, last_status, source, name, type))
         if check != last_status:
-            time.sleep(break_time)
+            time.sleep(SYSTEM["BREAK_TIME"])
             self.logger.info("Recheck : %s %s %s"%(source, name, type))
             recheck = ffmpeg.check_source(source)
             if recheck == check:
@@ -39,7 +39,7 @@ class LastCheck(object):
                 """
                 child_thread_list = []
                 profile = ProfileBLL()
-                profile_data = {"status": check, "agent": agent, "ip": ip}
+                profile_data = {"status": check, "agent": agent, "ip": SYSTEM["HOST"]}
                 child_thread = threading.Thread(target=profile.put, args=(id, profile_data,))
                 child_thread.start()
                 child_thread_list.append(child_thread)
@@ -48,7 +48,7 @@ class LastCheck(object):
                     channel += " "
                 while len(source) < 27:
                     source += " "
-                ip_config = ip
+                ip_config = SYSTEM["HOST"]
                 while len(ip_config) < 16:
                     ip_config += " "
                 message = """%s (ip:%s) %s in host: %s (%s)""" % (channel, source, status, ip_config, agent)
@@ -66,34 +66,34 @@ class LastCheck(object):
                 return 1
         return 0
 
-        def check(self):
-            if not is_monitor:
-                message = "Black screen monitor is disable, check your config!"
-                self.logger.error(message)
-                print message
-                time.sleep(60)
-                exit(0)
-            # ancestor_thread_list = []
-            file = File()
-            profile_list = file.read()
-            profile_list = profile_list[0:len(profile_list)-1]
-            if(profile_list):
-                for line in profile_list.split('\n'):
-                    self.logger.info("Last Check : %s"%(line))
-                    profile = json.loads(line)
-                    while threading.activeCount() > profile['thread']:
-                        time.sleep(1)
-                    t = threading.Thread(target=self.check_source,args=(profile['source'],
-                        profile['status'],
-                        profile['pa_id'],
-                        profile['agent'],
-                        profile['name'],
-                        profile['type'],
-                        )
+    def check(self):
+        if not SYSTEM["monitor"]["SOURCE"]:
+            message = "Black screen monitor is disable, check your config!"
+            self.logger.error(message)
+            print message
+            time.sleep(60)
+            exit(0)
+        # ancestor_thread_list = []
+        file = File()
+        profile_list = file.read()
+        profile_list = profile_list[0:len(profile_list)-1]
+        if(profile_list):
+            for line in profile_list.split('\n'):
+                self.logger.info("Last Check : %s"%(line))
+                profile = json.loads(line)
+                while threading.activeCount() > profile['thread']:
+                    time.sleep(1)
+                t = threading.Thread(target=self.check_source,args=(profile['source'],
+                    profile['status'],
+                    profile['pa_id'],
+                    profile['agent'],
+                    profile['name'],
+                    profile['type'],
                     )
-                    t.start()
-                time.sleep(30)
-            #         ancestor_thread_list.append(t)
-            # for ancestor_thread in ancestor_thread_list:
-            #     ancestor_thread.join()
-            time.sleep(5)
+                )
+                t.start()
+            time.sleep(30)
+        #         ancestor_thread_list.append(t)
+        # for ancestor_thread in ancestor_thread_list:
+        #     ancestor_thread.join()
+        time.sleep(5)

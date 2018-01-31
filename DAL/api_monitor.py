@@ -2,22 +2,26 @@ import requests # pip install requests
 import json
 from requests.exceptions import ConnectionError
 from requests.auth import HTTPBasicAuth
-from config import config
+from config.config import API
 
 class ApiMonitor:
-    def __init__(self, api_url):
+    def __init__(self, api):
+        api_url = "http://" + API[api]["URL"] + ":" + str(API[api]["PORT"]) +"/"
+        self.user = API[api]["USER"]
+        self.password = API[api]["PASSWORD"]
         self.agent_url = api_url + "agent/"
         self.log_url = api_url + "log/"
         self.profile_agent_url = api_url + "profile_agent/"
-        self.snmp_url = api_url + "profile_agent/snmp/" + config.IP
-        self.video_check_url = api_url + "profile_agent/video_check/" + config.IP
+        self.snmp_url = api_url + "profile_agent/snmp/"
+        self.video_check_url = api_url + "profile_agent/video_check/"
 
     def get(self, url):
+        print url
         message = "Unknow"
         data = None
         status = 500
         try:
-            rsp = requests.get(url, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
+            rsp = requests.get(url, auth=HTTPBasicAuth(self.user, self.password), timeout=5)
         except ConnectionError as e:
             message = str(e)
             data = None
@@ -50,7 +54,7 @@ class ApiMonitor:
         data = None
         status = 500
         try:
-            rsp = requests.put(url, json = json_data, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
+            rsp = requests.put(url, json = json_data, auth=HTTPBasicAuth(self.user, self.password), timeout=5)
         except ConnectionError as e:
             message = str(e)
             data = None
@@ -89,7 +93,7 @@ class ApiMonitor:
         data = None
         status = 500
         try:
-            rsp = requests.post(url, json = json_data, auth=HTTPBasicAuth(config.USER, config.PASSWD), timeout=5)
+            rsp = requests.post(url, json = json_data, auth=HTTPBasicAuth(self.user, self.password), timeout=5)
         except ConnectionError as e:
             message = str(e)
             data = None

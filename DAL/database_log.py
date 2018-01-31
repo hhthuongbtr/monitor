@@ -2,8 +2,8 @@ import json
 from database_monitor import Database
 
 class Log:
-    def __init__(self):
-        self.db = Database()
+    def __init__(self, database):
+        self.db = Database(database)
 
     def post(self, json_data):
         http_status_code = 500

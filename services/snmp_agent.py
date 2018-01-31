@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import logging
-from config import config
+from config.config import SYSTEM
 from utils import DateTime
 from BLL.profile import Snmp as SnmpBLL
 
@@ -108,22 +108,22 @@ class Snmp(object):
         return 0
 
     def create_snmp_at_broadcast_time(self):
-        if config.BLACK_SCREEN_MONITOR and config.SOURCE_MONITOR:
+        if SYSTEM["monitor"]["BLACK_SCREEN"] and SYSTEM["monitor"]["SOURCE"]:
             return self.create_snmp_video_check()
-        elif not config.BLACK_SCREEN_MONITOR and config.SOURCE_MONITOR:
+        elif not SYSTEM["monitor"]["BLACK_SCREEN"] and SYSTEM["monitor"]["SOURCE"]:
             return self.create_snmp()
 
     def create_snmp_at_broadcast_timeout(self):
-        if config.BLACK_SCREEN_MONITOR and config.SOURCE_MONITOR:
+        if SYSTEM["monitor"]["BLACK_SCREEN"] and SYSTEM["monitor"]["SOURCE"]:
             return self.create_snmp()
-        elif not config.BLACK_SCREEN_MONITOR and config.SOURCE_MONITOR:
+        elif not SYSTEM["monitor"]["BLACK_SCREEN"] and SYSTEM["monitor"]["SOURCE"]:
             return self.create_snmp()
 
     def set(self):
         date_time = DateTime()
         now = date_time.get_now()
         HH = date_time.get_hour(now)
-        if HH > config.BROADCAST_TIME_FROM and HH < config.BROADCAST_TIME_TO:
+        if HH > SYSTEM["broadcast_time"]["FROM"] and HH < SYSTEM["broadcast_time"]["TO"]:
             self.create_snmp_at_broadcast_time()
         else:
             self.create_snmp_at_broadcast_timeout()
