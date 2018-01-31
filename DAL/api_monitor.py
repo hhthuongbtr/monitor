@@ -16,7 +16,6 @@ class ApiMonitor:
         self.video_check_url = api_url + "profile_agent/video_check/"
 
     def get(self, url):
-        print url
         message = "Unknow"
         data = None
         status = 500

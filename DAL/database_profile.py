@@ -127,7 +127,7 @@ class Profile:
         return json_response
 
 class Snmp:
-    def __init__(self):
+    def __init__(self, database):
         self.db = Database(database)
 
     def parse_profile_data_table_to_array(self, profile_list):
