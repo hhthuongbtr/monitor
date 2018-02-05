@@ -27,10 +27,10 @@ class LastCheck(object):
         ffmpeg = Ffmpeg()
         check = ffmpeg.check_source(source)
         # print "%s : %s"%(check, last_status)
-        self.logger.info("Curent :%s <> Last: %s, %s %s %s"%(check, last_status, source, name, type))
+        self.logger.debug("Curent :%s <> Last: %s, %s %s %s"%(check, last_status, source, name, type))
         if check != last_status:
             time.sleep(SYSTEM["BREAK_TIME"])
-            self.logger.info("Recheck : %s %s %s"%(source, name, type))
+            self.logger.debug("Recheck : %s %s %s"%(source, name, type))
             recheck = ffmpeg.check_source(source)
             if recheck == check:
                 status = {0: "DOWN       ", 1: "UP         ", 2: "VIDEO ERROR", 3: "AUDIO ERROR"} [check]
@@ -79,7 +79,7 @@ class LastCheck(object):
         profile_list = profile_list[0:len(profile_list)-1]
         if(profile_list):
             for line in profile_list.split('\n'):
-                self.logger.info("Last Check : %s"%(line))
+                self.logger.debug("Last Check : %s"%(line))
                 profile = json.loads(line)
                 while threading.activeCount() > profile['thread']:
                     time.sleep(1)

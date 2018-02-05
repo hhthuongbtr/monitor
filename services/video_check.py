@@ -87,13 +87,13 @@ class VideoCheck(object):
         histogram_previous = self.get_histogram_previous_image()
         histogram_curent = self.get_histogram_curent_image()
         rms = self.compare_two_images(histogram_previous, histogram_curent)
-        self.logger.info("First check RMS :%d"%(rms))
+        self.logger.debug("First check RMS :%d"%(rms))
         if rms < 150:
             if int(self.last_video_status) == 1:
                 time.sleep(SYSTEM["BREAK_TIME"] * 3)
                 histogram_recheck = self.get_histogram_curent_image()
                 rms = self.compare_two_images(histogram_curent, histogram_recheck)
-                self.logger.warning("Recheck RMS %s %s %s: %d"%(self.source, self.name, self.type, rms))
+                self.logger.info("Recheck RMS %s %s %s: %d"%(self.source, self.name, self.type, rms))
                 if rms < 150:
                     video_status = 0
                     source_status = 2
@@ -103,7 +103,7 @@ class VideoCheck(object):
                 time.sleep(SYSTEM["BREAK_TIME"] * 3)
                 histogram_recheck = self.get_histogram_curent_image()
                 rms = self.compare_two_images(histogram_curent, histogram_recheck)
-                self.logger.warning("Recheck RMS %s %s %s: %d"%(self.source, self.name, self.type, rms))
+                self.logger.info("Recheck RMS %s %s %s: %d"%(self.source, self.name, self.type, rms))
                 if rms >= 200:
                     video_status = 1
                     source_status = 1

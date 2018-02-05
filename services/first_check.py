@@ -25,13 +25,13 @@ class FirstCheck(object):
         ffmpeg = Ffmpeg()
         check = ffmpeg.check_source(source)
         # print "%s : %s"%(check, last_status)
-        self.logger.info("Curent :%s <> Last: %s"%(check, last_status))
+        self.logger.debug("Curent :%s <> Last: %s"%(check, last_status))
         if check != last_status:
             json_data = """{"source":"%s","status":%s,"pa_id":%s,"agent": "%s","thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, agent, thread, name, type)
             file = File()
             replicate = file.append(json_data)
             if not replicate:
-                self.logger.warning("Doubt curent %s <> Last %s : %s"%(check, last_status, str(json_data)))
+                self.logger.debug("Doubt curent %s <> Last %s : %s"%(check, last_status, str(json_data)))
 
 
     def check(self):
@@ -47,7 +47,7 @@ class FirstCheck(object):
             if data["status"] == 200:
                 profile_list = data["data"]
             else:
-                self.logger.warning(str(data["status"]) + " " + data["message"])
+                self.logger.error(str(data["status"]) + " " + data["message"])
                 print "Error code: " + str(data["status"])
                 print data["message"]
                 exit(1)
