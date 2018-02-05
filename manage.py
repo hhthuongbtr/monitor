@@ -1,16 +1,9 @@
 #!/usr/bin/python
 import sys
-import logging
-import logging.config
-from config.config import LOGGING as logging_config_dict
 from optparse import OptionParser
 from services import FirstCheck, LastCheck, VideoCheck, Monitor, Snmp
 
 if __name__ == "__main__":
-    #logging.config.dictConfig(logging_config_dict)
-    # Log that the logger was configured
-    logger = logging.getLogger(__name__)
-    logger.info('Completed configuring logger()!')
     # Parsing argurments
     parser = OptionParser()
     parser.add_option("-s", "-S", dest="service_check", type="string",
