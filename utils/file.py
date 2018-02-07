@@ -43,3 +43,43 @@ class File:
         else:
             print "replicate"
             return 1
+
+class Snmp:
+    def __init__(self):
+        self.channel_status = "snmp/agent/channel_status"
+        self.channel_name = "snmp/agent/channel_name"
+        self.channel_profile = "snmp/agent/channel_profile"
+
+    def read_profile(self, file_path = None):
+        file_path = self.channel_profile
+        with open(file_path, "r") as text_file:
+            return text_file.read()
+
+    def read_status(self, file_path = None):
+        file_path = self.channel_status
+        with open(file_path, "r") as text_file:
+            return text_file.read()
+
+    def read_name(self, file_path = None):
+        file_path = self.channel_name
+        with open(file_path, "r") as text_file:
+            return text_file.read()
+
+    def update_profile(self, text = None):
+        f = open(self.channel_profile, 'w')
+        f.write(text)
+        f.close()
+        return 0
+
+    def update_status(self, text = None):
+        f = open(self.channel_status, 'w')
+        f.write(text)
+        f.close()
+        return 0
+
+    def update_name(self, text = None):
+        f = open(self.channel_name, 'w')
+        f.write(text)
+        f.close()
+        return 0
+

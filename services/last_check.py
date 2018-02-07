@@ -8,6 +8,7 @@ from utils.ffmpeg import Ffmpeg
 from BLL.log import Log as LogBLL
 from config.config import SYSTEM
 from BLL.profile import Profile as ProfileBLL
+from services import AgentSnmp as LocalSnmp
 
 class LastCheck(object):
     """docstring for LastCheck"""
@@ -43,6 +44,7 @@ class LastCheck(object):
                 child_thread = threading.Thread(target=profile.put, args=(id, profile_data,))
                 child_thread.start()
                 child_thread_list.append(child_thread)
+                """Append log"""
                 channel = """%s %s"""%(name, type)
                 while len(channel) < 22:
                     channel += " "
@@ -58,6 +60,12 @@ class LastCheck(object):
                 child_thread = threading.Thread(target=log.post, args=(log_data,))
                 child_thread.start()
                 child_thread_list.append(child_thread)
+                """Update local snmp IPTV"""
+                local_snmp = LocalSnmp(profile = source + "-" + type, name = channel, status = check)
+                child_thread = threading.Thread(target=local_snmp.set)
+                child_thread.start()
+                child_thread_list.append(child_thread)
+
                 """
                 Wait for update database complete
                 """

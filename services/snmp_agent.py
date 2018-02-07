@@ -4,6 +4,7 @@ import logging
 from config.config import SYSTEM
 from utils import DateTime
 from BLL.profile import Snmp as SnmpBLL
+from utils.file import Snmp as LocalSnmp
 
 class Snmp(object):
     """docstring for Snmp"""
@@ -128,3 +129,65 @@ class Snmp(object):
         else:
             self.create_snmp_at_broadcast_timeout()
 
+class AgentSnmp(object):
+    def __init__(self, profile = None, name = None, status = None):
+        self.logger = logging.getLogger(__name__)
+        self.profile = profile
+        self.name = name
+        self.status = status
+
+    def get_line_posision(self):
+        snmp = LocalSnmp()
+        profile_list = snmp.read_profile()
+        count = 0
+        for line in profile_list.split('\n'):
+            line = line.strip()
+            count += 1
+            if line == self.profile:
+                break
+        return count
+
+    def update_profile(self, posision = None):
+        snmp = LocalSnmp()
+        channel_list = snmp.read_profile()
+        new_channel_list = ""
+        count = 0
+        for line in channel_list.split('\n'):
+            line = line.strip()
+            count += 1
+            if count != posision and line:
+                new_channel_list = new_channel_list + line + "\n"
+        new_channel_list = new_channel_list + self.profile
+        return snmp.update_profile(new_channel_list)
+
+    def update_status(self, posision = None):
+        snmp = LocalSnmp()
+        status_list = snmp.read_status()
+        new_status_list = ""
+        count = 0
+        for line in status_list.split('\n'):
+            line = line.strip()
+            count += 1
+            if count != posision and line:
+                new_status_list = new_status_list + line + "\n"
+        new_status_list = new_status_list + str(self.status)
+        return snmp.update_status(new_status_list)
+
+    def update_name(self, posision = None):
+        snmp = LocalSnmp()
+        name_list = snmp.read_name()
+        new_name_list = ""
+        count = 0
+        for line in name_list.split('\n'):
+            line = line.strip()
+            count += 1
+            if count != posision and line:
+                new_name_list = new_name_list + line + "\n"
+        new_name_list = new_name_list + self.name
+        return snmp.update_name(new_name_list)
+
+    def set(self):
+        posision = self.get_line_posision()
+        self.update_profile(posision)
+        self.update_status(posision)
+        self.update_name(posision)

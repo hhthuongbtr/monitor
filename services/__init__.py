@@ -8,7 +8,7 @@ from .first_check import FirstCheck
 from .last_check import LastCheck
 from .video_check import VideoCheck
 from .monitor import Monitor
-from .snmp_agent import Snmp
+from .snmp_agent import Snmp, AgentSnmp
 
 # Create the Logger
 logger = logging.getLogger(__name__)

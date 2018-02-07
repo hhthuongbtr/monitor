@@ -13,6 +13,7 @@ from utils.ffmpeg import Ffmpeg
 from BLL.profile import Profile as ProfileBLL
 from BLL.log import Log as LogBLL
 from config.config import SYSTEM
+from services import AgentSnmp as LocalSnmp
 
 class VideoCheck(object):
     """docstring for VideoCheck"""
@@ -74,6 +75,11 @@ class VideoCheck(object):
         }
         log = LogBLL()
         child_thread = threading.Thread(target=log.post, args=(log_data,))
+        child_thread.start()
+        child_thread_list.append(child_thread)
+        """Update local snmp IPTV"""
+        local_snmp = LocalSnmp(profile = self.source + "-" + self.type, name = self.name, status = 2)
+        child_thread = threading.Thread(target=local_snmp.set)
         child_thread.start()
         child_thread_list.append(child_thread)
         """
