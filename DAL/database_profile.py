@@ -43,6 +43,26 @@ class Profile:
         json_response = json.loads(json_response)
         return json_response
 
+    def get_by_ip_multicast(self, source):
+        http_status_code = 500
+        message = "Unknow"
+        data = None
+        sql = """select pa.id, p.ip, p.protocol, pa.status, a.name as agent, a.thread, c.name, p.type
+            from profile as p, agent as a, profile_agent as pa,channel as c 
+            where p.ip LIKE '%s:%%' and a.ip='%s' and a.active=1 and pa.monitor=1 and p.channel_id=c.id and pa.profile_id=p.id and pa.agent_id=a.id"""%(source,(SYSTEM["HOST"]))
+        status, message, data_table = self.db.execute_query(sql)
+        if status == 1:
+            http_status_code = 500
+            message = message
+            data = None
+        if status == 0:
+            http_status_code = 200
+            message = message
+            data = self.parse_profile_data_table_to_array(data_table)
+        json_response = {"status": http_status_code, "message": message, "data": data}
+        json_response = json.dumps(json_response)
+        json_response = json.loads(json_response)
+        return json_response
 
     def convert_profile_agent_check_video_list_to_array(self, data_table):
         args = []

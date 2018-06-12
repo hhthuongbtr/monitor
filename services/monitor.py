@@ -14,7 +14,7 @@ class Monitor(object):
                 "mem": system_status.get_mem(),
                 "disk": system_status.get_disk()
         }
-        self.logger.warning(str(data))
+        self.logger.info(str(data))
         agent = Agent()
         agent.put(data)
 

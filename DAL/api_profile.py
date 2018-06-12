@@ -9,7 +9,15 @@ class Profile:
         rsp = self.api.get(self.api.profile_agent_url + SYSTEM["HOST"] + "/")
         return rsp
 
+    def get_by_ip_multicast(self, source):
+        rsp = self.api.get(self.api.agent_url + SYSTEM["HOST"] + "/" + source + "/")
+        return rsp
+
     def get_video_check_list(self):
+        rsp = self.api.get(self.api.video_check_url + SYSTEM["HOST"] + "/")
+        return rsp
+        
+    def get_profile_id(self):
         rsp = self.api.get(self.api.video_check_url + SYSTEM["HOST"] + "/")
         return rsp
 

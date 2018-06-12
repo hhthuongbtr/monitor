@@ -1,81 +1,67 @@
 SYSTEM = {
-    "HOST":"172.28.0.42",
-    "monitor": {
-        "SOURCE": True,
-        "BLACK_SCREEN": True
-    },
-
-    "broadcast_time": {
-        "FROM": 6,
-        "TO": 22
-    },
-
-    "libery": {
-        "FFPROBE": "/usr/bin/ffprobe",
-        "FFMPEG": "/usr/bin/ffmpeg"
-    },
-    "BREAK_TIME": 15
-}
+    'broadcast_time': {
+        'TO': 22, 
+        'FROM': 6
+        }, 
+    'HOST': '10.0.0.205', 
+    'libery': {
+        'FFPROBE': '/usr/local/bin/ffprobe', 
+        'FFMPEG': '/opt/ffmpeg/ffmpeg'
+        }, 
+    'monitor': {
+        'SOURCE': True, 
+        'BLACK_SCREEN': False
+        }, 
+    'BREAK_TIME': 20
+    }
 
 API = {
-    "master": {
-        "URL": "localhost",
-        "PORT": 8888,
-        "USER": "monitor",
-        "PASSWORD": "iptv13579"
-    },
-
-    "slave": {
-        "ACTIVE" : False,
-        "URL": "localhost",
-        "PORT": 8888,
-        "USER": "monitor",
-        "PASSWORD": "iptv13579"
+    'master': {
+        'URL': '42.117.9.100', 
+        'PASSWORD': 'iptv13579', 
+        'PORT': 8888, 
+        'USER': 'monitor'
+        },
+    'slave': {
+        'ACTIVE': False, 
+        'URL': '42.117.9.99', 
+        'PASSWORD': 'iptv13579', 
+        'PORT': 8888, 
+        'USER': 'monitor'
+        }
     }
-}
 
 DATABASE = {
-    "master": {
-        "ACTIVE" : True,
-        "HOST": "localhost",
-        "NAME": "monitor",
-        "USER": "root",
-        "PASSWORD": "root",
-        "PORT": 3306
-    },
-
-    "slave": {
-        "ACTIVE" : False,
-        "HOST": "localhost",
-        "NAME": "monitor",
-        "USER": "root",
-        "PASSWORD": "root",
-        "PORT": 3306
-    }
-}
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "simple": {
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    'master': {
+        'NAME': 'monitor', 
+        'HOST': 'localhost', 
+        'USER': 'root', 
+        'ACTIVE': True, 
+        'PASSWORD': 'root', 
+        'PORT': 3306
+        },
+    'slave': {
+        'NAME': 'monitor', 
+        'HOST': 'localhost', 
+        'USER': 'root', 
+        'ACTIVE': False, 
+        'PASSWORD': 'root', 
+        'PORT': 3306
         }
-    },
-
-    "handlers": {
-        "file_handler": {
-            "class": "logging.FileHandler",
-            "level": "DEBUG",
-            "formatter": "simple",
-            "filename": "/var/log/monior_IPTV.log",
-            "encoding": "utf8"
-        }
-    },
-
-    "root": {
-        "level": "DEBUG",
-        "handlers": ["file_handler"]
     }
-}
 
+SUPERVISORD={
+    'HOST'                  : 'localhost',
+    'PORT'                  : 9001,
+    'CONF_DIR'              : '/etc/supervisord/conf.d',
+    'CONTROL_DIR'           : '/usr/bin/supervisorctl',
+    'CONF_TEMPLATE_DIR'     : 'config/supervisord.template',
+    'CONF_EXTENSION'        : '.ini'
+    }
+
+SOCKET = {
+    "HOST"                  :"42.117.9.99",
+    "PORT"                  :5672,
+    "USER"                  :"monitor",
+    "PASSWD"                :"iptv13579"
+    }

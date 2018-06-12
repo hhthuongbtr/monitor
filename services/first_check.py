@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import sys
 import time
 import logging
@@ -29,9 +28,9 @@ class FirstCheck(object):
         if check != last_status:
             json_data = """{"source":"%s","status":%s,"pa_id":%s,"agent": "%s","thread":%s,"name":"%s","type":"%s"}"""%(source, last_status, id, agent, thread, name, type)
             file = File()
-            replicate = file.append(json_data)
+            replicate = file.append_to_check_list(json_data)
             if not replicate:
-                self.logger.debug("Doubt curent %s <> Last %s : %s"%(check, last_status, str(json_data)))
+                self.logger.info("Doubt curent %s <> Last %s : %s"%(check, last_status, str(json_data)))
 
 
     def check(self):

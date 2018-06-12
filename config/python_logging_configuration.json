@@ -1,0 +1,94 @@
+{
+    "version": 1,
+    "disable_existing_loggers": true,
+    "formatters":{ 
+        "dal": {
+            "format":"Monitor: date: %(asctime)s - %(name)s - p%(process)s {%(pathname)s:%(lineno)d} - serverity: %(levelname)s - message: %(message)s"
+        },
+        "rabbit":{
+            "format":"Monitor: date: %(asctime)s - %(name)s - p%(process)s {%(pathname)s:%(lineno)d} - serverity: %(levelname)s - message: %(message)s"
+        },
+        "sync_alarm":{
+            "format":"SyncAlam: date: %(asctime)s - %(name)s - p%(process)s {%(pathname)s:%(lineno)d} - serverity: %(levelname)s - message: %(message)s"
+        },
+        "supervisord":{
+            "format":"Monitor: date: %(asctime)s - %(name)s - p%(process)s {%(pathname)s:%(lineno)d} - serverity: %(levelname)s - message: %(message)s"
+        },
+        "utils":{
+            "format":"Monitor: date: %(asctime)s - %(name)s - p%(process)s {%(pathname)s:%(lineno)d} - serverity: %(levelname)s - message: %(message)s"
+        },
+        "monitor":{
+            "format":"Monitor: date: %(asctime)s - %(name)s - serverity: %(levelname)s - message: %(message)s"
+        }
+    },
+    "handlers": {
+        "dal_handler": {
+            "filename": "/var/log/monitor/DAL.log",
+            "encoding": "utf8",
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "dal"
+        },
+        "rabbit_handler":{
+            "filename": "/var/log/monitor/rabbit.log",
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "rabbit"
+        },
+        "sync_alarm_handler":{
+            "filename": "/var/log/monitor/sync_alarm.log",
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "monitor"
+        },
+        "supervisord_handler":{
+            "filename": "/var/log/monitor/supervisord.log",
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "supervisord"
+        },
+        "utils_handler":{
+            "filename": "/var/log/monitor/utils.log",
+            "class": "logging.FileHandler",
+            "level": "DEBUG",
+            "formatter": "utils"
+        },
+        "monitor_handler": {
+            "address": "/dev/log",
+            "class": "logging.handlers.SysLogHandler",
+            "level": "WARNING",
+            "facility": "local6",
+            "formatter": "monitor"
+        }
+    },
+    "root": {
+        "level": "WARNING",
+        "handlers": ["monitor_handler"]
+    },
+    "loggers": {
+        "dal": {
+            "handlers": ["dal_handler"],
+            "level": "DEBUG"
+        },
+        "rabbit": {
+            "handlers": ["rabbit_handler"],
+            "level": "DEBUG"
+        },
+        "sync_alarm": {
+            "handlers": ["sync_alarm_handler"],
+            "level": "DEBUG"
+        },
+        "supervisord": {
+            "handlers": ["supervisord_handler"],
+            "level": "DEBUG"
+        },
+        "utils": {
+            "handlers": ["utils_handler"],
+            "level": "DEBUG"
+        },
+        "monitor": {
+            "handlers": ["monitor_handler"],
+            "level": "WARNING"
+        }
+    }
+}

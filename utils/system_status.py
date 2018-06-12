@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import os, re, fnmatch
 import psutil # pip install psutil
 import urllib, json

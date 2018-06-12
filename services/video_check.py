@@ -1,19 +1,19 @@
-#!/usr/bin/python
 import time
 import logging
 import threading
 import subprocess
 from subprocess import call
 ###-image compare#########
-from PIL import Image #pip install Pillow
+#from PIL import Image #pip install Pillow
 import math, operator
 ##########################
 import os, sys, shlex, re, fnmatch, signal
-from utils.ffmpeg import Ffmpeg
+from utils import Ffmpeg
+from utils import DateTime
 from BLL.profile import Profile as ProfileBLL
 from BLL.log import Log as LogBLL
 from config.config import SYSTEM
-from services import AgentSnmp as LocalSnmp
+from snmp_agent import AgentSnmp as LocalSnmp
 
 class VideoCheck(object):
     """docstring for VideoCheck"""
@@ -55,10 +55,12 @@ class VideoCheck(object):
         return rms
 
     def get_human_readable_status(self, status):
-        alarm_status = {0: "DOWN       ", 1: "UP         ", 2: "VIDEO ERROR", 3: "AUDIO ERROR"} [status]
+        alarm_status = {0: "DOWN       ", 1: "VIDEO OK   ", 2: "VIDEO ERROR", 3: "AUDIO ERROR"} [status]
         return alarm_status
 
     def update_data(self, video_status, source_status):
+        date_time = DateTime()
+        opdate = date_time.get_now()
         child_thread_list = []
         profile = ProfileBLL()
         profile_data = {"video": video_status, "agent": self.agent, "ip": self.ip}
@@ -67,12 +69,23 @@ class VideoCheck(object):
         child_thread_list.append(child_thread)
         human_readable_status = self.get_human_readable_status(source_status)
         message = """%s %s (ip:%s) %s in host: %s (%s)"""%(self.name, self.type, self.source, human_readable_status, self.ip, self.agent)
-        self.logger.critical("Change status :%s"%(message))
         log_data = {
                     "host": self.protocol + "://" + self.source, 
                     "tag": "status", 
                     "msg": message
         }
+        rslog = {
+                 "sev"        : "Critical",
+                 "jname"      : self.name,
+                 "type"       : self.type,
+                 "res"        : self.source,
+                 "desc"       : human_readable_status,
+                 "cat"        : "Communication",
+                 "host"       : self.agent,
+                 "opdate"     : opdate,
+                 "cldate"     : opdate
+        }
+        self.logger.critical(json.dumps(rslog))
         log = LogBLL()
         child_thread = threading.Thread(target=log.post, args=(log_data,))
         child_thread.start()

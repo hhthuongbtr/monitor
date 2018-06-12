@@ -104,6 +104,37 @@ class Profile(object):
         self.logger.error(eror)
         return http_master_rsp
 
+    def get_by_ip_multicast(self, source):
+        http_master_rsp = self.master_api.get_by_ip_multicast(source)
+        if http_master_rsp["status"] == 200:
+            self.logger.info("Master Api: " + http_master_rsp["message"])
+            return http_master_rsp
+        eror = "Master Api: " + http_master_rsp["message"] + "\n"
+        self.logger.warning("Master Api: " + http_master_rsp["message"])
+
+        if API["slave"]["ACTIVE"]:
+            slave_api = ApiProfileDAL(config.SLAVE_API)
+            http_slave_rsp = slave_api.get_by_ip_multicast(source)
+            if http_slave_rsp["status"] == 200:
+                self.logger.info("Slave Api: " + http_slave_rsp["message"])
+                return http_slave_rsp
+            else:
+                eror += "Slave Api: " + http_slave_rsp["message"] + "\n"
+                self.logger.warning("Slave Api: " + http_slave_rsp["message"])
+
+        if DATABASE["master"]["ACTIVE"]:
+            master_db = DbProfileDAL("master")
+            db_rsp = master_db.get_by_ip_multicast(source)
+            if db_rsp["status"] == 200:
+                self.logger.info("Database: " + db_rsp["message"])
+                return db_rsp
+            else:
+                eror += "Database: " + db_rsp["message"] + "\n"
+                self.logger.warning("Database: " + db_rsp["message"])
+        print eror
+        self.logger.error(eror)
+        return http_master_rsp
+
 class Snmp(object):
     """docstring for Snmp"""
     def __init__(self):

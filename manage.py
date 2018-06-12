@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import sys
 from optparse import OptionParser
 from services import FirstCheck, LastCheck, VideoCheck, Monitor, Snmp
@@ -7,7 +6,7 @@ if __name__ == "__main__":
     # Parsing argurments
     parser = OptionParser()
     parser.add_option("-s", "-S", dest="service_check", type="string",
-                      help="Service check: first_check (f/F), last_check (l/L), video_check (v/V), snmp (s/S) and monitor (m/M).", metavar=' ')
+                      help="Service check: first_check (f/F), last_check (l/L), video_check (v/V), snmp (s/S) and monitor (m/M), source ip (225.1.1.1).", metavar=' ')
 
     (options, args) = parser.parse_args()
 
@@ -36,4 +35,5 @@ if __name__ == "__main__":
     elif options.service_check == 's' or options.service_check == 'S' or options.service_check == 'snmp':
         snmp = Snmp()
         snmp.set()
+
  

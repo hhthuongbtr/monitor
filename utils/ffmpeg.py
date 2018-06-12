@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import time
 from subprocess import call
 import os, sys, subprocess, shlex, re, fnmatch,signal
