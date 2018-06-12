@@ -54,7 +54,7 @@ class SyncAlam:
         arc = AsRequiredCheck()
         while 1:
             times += 1
-            if (times % 5 == 0) or (check == -1):
+            if (times % 10 == 0) or (check == -1):
                 profile = None
                 profile = self.update_data(ip)
             self.logger.info('Check ip %s, %d times'%(ip, times))
@@ -92,5 +92,10 @@ if __name__ == "__main__":
     """
     clear supervisord job config
     """
-    rb = Rabbit(SYSTEM["HOST"])
-    rb.push("100")
+    try:
+        rb = Rabbit(SYSTEM["HOST"])
+        rb.push("100")
+    except Exception as e:
+        print e
+        self.logger.error(str(e))
+    time.sleep(10)

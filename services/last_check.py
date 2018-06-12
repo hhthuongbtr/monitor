@@ -93,7 +93,7 @@ class LastCheck(object):
 
     def check(self):
         if not SYSTEM["monitor"]["SOURCE"]:
-            message = "Black screen monitor is disable, check your config!"
+            message = "Source monitor is disable, check your config!"
             self.logger.error(message)
             print message
             time.sleep(60)
@@ -121,5 +121,4 @@ class LastCheck(object):
                 ancestor_thread_list.append(t)
         for ancestor_thread in ancestor_thread_list:
             ancestor_thread.join()
-        time.sleep(5)
-
+        time.sleep(10)

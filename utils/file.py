@@ -55,7 +55,7 @@ class File:
 
     def get_check_list(self):
         #Read file checkdata.tmp
-        f = self.read(self.filedir)
+        lines = self.read(self.filedir)
         #Clear checkdata.tmp after read
         command="cat /dev/null > "+self.filedir
         os.system(command)

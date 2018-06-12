@@ -23,7 +23,7 @@ API = {
         'USER': 'monitor'
         },
     'slave': {
-        'ACTIVE': False, 
+        'ACTIVE': True, 
         'URL': '42.117.9.99', 
         'PASSWORD': 'iptv13579', 
         'PORT': 8888, 
@@ -34,18 +34,18 @@ API = {
 DATABASE = {
     'master': {
         'NAME': 'monitor', 
-        'HOST': 'localhost', 
-        'USER': 'root', 
+        'HOST': '118.69.166.134', 
+        'USER': 'MonitorAgent', 
         'ACTIVE': True, 
-        'PASSWORD': 'root', 
+        'PASSWORD': '11nit0rA93nt', 
         'PORT': 3306
         },
     'slave': {
         'NAME': 'monitor', 
-        'HOST': 'localhost', 
-        'USER': 'root', 
+        'HOST': '42.144.244.190', 
+        'USER': 'MonitorAgent', 
         'ACTIVE': False, 
-        'PASSWORD': 'root', 
+        'PASSWORD': '11nit0rA93nt', 
         'PORT': 3306
         }
     }
@@ -54,8 +54,8 @@ SUPERVISORD={
     'HOST'                  : 'localhost',
     'PORT'                  : 9001,
     'CONF_DIR'              : '/etc/supervisord/conf.d',
-    'CONTROL_DIR'           : '/usr/bin/supervisorctl',
-    'CONF_TEMPLATE_DIR'     : 'config/supervisord.template',
+    'CONTROL_DIR'           : '/usr/local/bin/supervisorctl',
+    'CONF_TEMPLATE_DIR'     : '/monitor/config/supervisord.template',
     'CONF_EXTENSION'        : '.ini'
     }
 

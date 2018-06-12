@@ -20,7 +20,7 @@ class Profile(object):
         self.logger.warning("Master Api: " + http_master_rsp["message"])
 
         if API["slave"]["ACTIVE"]:
-            slave_api = ApiProfileDAL(config.SLAVE_API)
+            slave_api = ApiProfileDAL("slave")
             http_slave_rsp = slave_api.get()
             if http_slave_rsp["status"] == 200:
                 self.logger.info("Slave Api: " + http_slave_rsp["message"])
@@ -51,7 +51,7 @@ class Profile(object):
         self.logger.warning("Master Api: " + http_master_rsp["message"])
 
         if API["slave"]["ACTIVE"]:
-            slave_api = ApiProfileDAL(config.SLAVE_API)
+            slave_api = ApiProfileDAL("slave")
             http_slave_rsp = slave_api.get_video_check_list()
             if http_slave_rsp["status"] == 200:
                 self.logger.info("Slave Api: " + http_slave_rsp["message"])
@@ -82,7 +82,7 @@ class Profile(object):
         self.logger.warning("Master Api: " + http_master_rsp["message"])
 
         if API["slave"]["ACTIVE"]:
-            slave_api = ApiProfileDAL(config.SLAVE_API)
+            slave_api = ApiProfileDAL("slave")
             http_slave_rsp = slave_api.put(id, data)
             if http_slave_rsp["status"] == 202:
                 self.logger.info("Slave Api: " + http_slave_rsp["message"])
@@ -113,7 +113,7 @@ class Profile(object):
         self.logger.warning("Master Api: " + http_master_rsp["message"])
 
         if API["slave"]["ACTIVE"]:
-            slave_api = ApiProfileDAL(config.SLAVE_API)
+            slave_api = ApiProfileDAL("slave")
             http_slave_rsp = slave_api.get_by_ip_multicast(source)
             if http_slave_rsp["status"] == 200:
                 self.logger.info("Slave Api: " + http_slave_rsp["message"])
@@ -150,7 +150,7 @@ class Snmp(object):
         self.logger.warning("Master Api: " + http_master_rsp["message"])
 
         if API["slave"]["ACTIVE"]:
-            slave_api = ApiSnmpDAL(config.SLAVE_API)
+            slave_api = ApiSnmpDAL("slave")
             http_slave_rsp = slave_api.get()
             if http_slave_rsp["status"] == 200:
                 self.logger.info("Slave Api: " + http_slave_rsp["message"])
