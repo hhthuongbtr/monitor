@@ -69,7 +69,7 @@ class File:
         return lines
 
     def append_to_check_list(self, text):
-        f = self.read(self.filedir)
+        data_rows = self.read(self.filedir)
         fips = open(self.inprocess, 'r')
         data_ips = fips.read()
         fips.close()
