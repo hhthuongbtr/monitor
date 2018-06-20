@@ -69,10 +69,13 @@ if __name__ == "__main__":
     # Parsing argurments
     parser = OptionParser()
     parser.add_option("-s", "-S", dest="ip", type="string",
-                      help="ip ip multicast(Ex: 225.1.1.1).", metavar=' ')
-
+                      help="ip multicast(Ex: 225.1.1.1).", metavar=' ')
+    parser.add_option("-j", "-J", dest="jid", type="string",
+                      help="Job id.", metavar=' ')
+    parser.add_option("-H", dest="thomson_host", type="string",
+                      help="ip thomson is running job.", metavar=' ')
     (options, args) = parser.parse_args()
-
+    check = 0
     #Check argurments
     if not getattr(options, 'ip'):
         print 'Option %s not specified'%(ip)
@@ -88,11 +91,22 @@ if __name__ == "__main__":
         if not profile:
             raise ValueError('could not find %s' % (options.ip))
         else:
-            sa.check(profile)
-    """
-    clear supervisord job config
-    """
+            check = sa.check(profile)
     try:
+        if options.jid != "None" and check == 1:
+            try:
+                jid = int(options.jid)
+                message = {"host"    : options.thomson_host,
+                           "jid"     : jid,
+                           "source"  : get_ip_from_ip_multicast(options.ip)
+                          }
+                running_backup_queue = Rabbit(SYSTEM["RUNNING_BACKUP_QUEUE"])
+                running_backup_queue.push(json.dumps(message))
+            except Exception as e:
+                self.logger.error(str(e))
+        """
+        clear supervisord job config
+        """
         rb = Rabbit(SYSTEM["HOST"])
         rb.push("100")
     except Exception as e:

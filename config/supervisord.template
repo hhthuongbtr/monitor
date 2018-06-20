@@ -1,5 +1,5 @@
 [program:{name}]
-command=/usr/local/bin/python {base_dir}/service.sync_alarm.py -s {ip}
+command=/usr/local/bin/python {base_dir}/service.sync_alarm.py -s {ip} -j {jid} -H {host}
 directory={base_dir}
 
 redirect_stderr=true

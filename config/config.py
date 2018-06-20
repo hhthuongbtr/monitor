@@ -12,7 +12,8 @@ SYSTEM = {
         'SOURCE': True, 
         'BLACK_SCREEN': False
         }, 
-    'BREAK_TIME': 20
+    'BREAK_TIME': 20,
+    'RUNNING_BACKUP_QUEUE' : 'running_backup'
     }
 
 API = {
