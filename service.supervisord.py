@@ -106,7 +106,6 @@ def callback(ch, method, properties, body):
         return 0
     name = profile_list[0]['name'] + "_" + profile_list[0]['type']
     name = name.replace(" ", "")
-    print name
     create_supervisord_config(ip, name, jid, thomson_host)
     get_supervisord(name)
 
