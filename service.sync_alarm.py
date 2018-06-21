@@ -13,6 +13,7 @@ from rabbit import Rabbit
 with open("/monitor/config/python_logging_configuration.json", 'r') as configuration_file:
     config_dict = json.load(configuration_file)
 logging.config.dictConfig(config_dict)
+logger = logging.getLogger("sync_alarm")
 
 def get_ip_from_ip_multicast(source):
     ip_pattern=re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
@@ -67,7 +68,7 @@ class SyncAlam:
             """
             if check == 1 or check == 404:
                 self.logger.warning('finish check ip %s, %d times'%(ip, times))
-                break
+                return check
             time.sleep(5)
         return 0
 
@@ -85,7 +86,7 @@ if __name__ == "__main__":
     #Check argurments
     if not getattr(options, 'ip'):
         print 'Option %s not specified'%(ip)
-        self.logger.error('Option %s not specified'%(ip))
+        logger.error('Option %s not specified'%(ip))
         parser.print_help()
     else:
         """
@@ -109,8 +110,11 @@ if __name__ == "__main__":
                           }
                 running_backup_queue = Rabbit(SYSTEM["RUNNING_BACKUP_QUEUE"])
                 running_backup_queue.push(json.dumps(message))
+                logger.info("Jid: %s, check_status: %s --> send message: %s"%(str(options.Jid), str(check), str(message)))
             except Exception as e:
-                self.logger.error(str(e))
+                logger.error(str(e))
+        else:
+            logger.info("Jid: %s, check_status: %s --> Not send message"%(str(options.Jid), str(check)))
         """
         clear supervisord job config
         """
@@ -118,5 +122,5 @@ if __name__ == "__main__":
         rb.push("100")
     except Exception as e:
         print e
-        self.logger.error(str(e))
+        logger.error(str(e))
     time.sleep(10)
