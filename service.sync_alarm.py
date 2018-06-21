@@ -104,7 +104,8 @@ if __name__ == "__main__":
                 jid = int(options.jid)
                 message = {"host"    : options.thomson_host,
                            "jid"     : jid,
-                           "source"  : get_ip_from_ip_multicast(options.ip)
+                           "source"  : get_ip_from_ip_multicast(options.ip),
+                           "status"  : check
                           }
                 running_backup_queue = Rabbit(SYSTEM["RUNNING_BACKUP_QUEUE"])
                 running_backup_queue.push(json.dumps(message))
