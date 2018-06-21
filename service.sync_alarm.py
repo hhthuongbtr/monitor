@@ -59,7 +59,13 @@ class SyncAlam:
                 profile = self.update_data(ip)
             self.logger.info('Check ip %s, %d times'%(ip, times))
             check = arc.check(profile, times)
-            if check == 1:
+            """
+            Condition break loop
+            status code:
+             1: channel up
+             404: During monitor system is cancel.
+            """
+            if check == 1 or check == 404:
                 self.logger.warning('finish check ip %s, %d times'%(ip, times))
                 break
             time.sleep(5)

@@ -111,7 +111,7 @@ class AsRequiredCheck(object):
     def check(self, profile, times = None):
         if not profile:
             self.logger.warning("Source not found")
-            return 1
+            return 404
         return self.check_source(profile['protocol'] + "://" +profile['ip'],
                     profile['status'],
                     profile['id'],
