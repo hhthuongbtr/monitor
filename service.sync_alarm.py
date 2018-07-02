@@ -110,11 +110,11 @@ if __name__ == "__main__":
                           }
                 running_backup_queue = Rabbit(SYSTEM["RUNNING_BACKUP_QUEUE"])
                 running_backup_queue.push(json.dumps(message))
-                logger.info("Jid: %s, check_status: %s --> send message: %s"%(str(options.Jid), str(check), str(message)))
+                logger.info("Jid: %s, check_status: %s --> send message: %s"%(str(options.jid), str(check), str(message)))
             except Exception as e:
                 logger.error(str(e))
         else:
-            logger.info("Jid: %s, check_status: %s --> Not send message"%(str(options.Jid), str(check)))
+            logger.info("Jid: %s, check_status: %s --> Not send message"%(str(options.jid), str(check)))
         """
         clear supervisord job config
         """
