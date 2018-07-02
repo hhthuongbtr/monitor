@@ -4,7 +4,7 @@ import threading
 import subprocess
 from subprocess import call
 ###-image compare#########
-#from PIL import Image #pip install Pillow
+from PIL import Image #pip install Pillow
 import math, operator
 ##########################
 import os, sys, shlex, re, fnmatch, signal
