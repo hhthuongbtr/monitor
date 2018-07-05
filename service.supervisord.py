@@ -105,7 +105,7 @@ def callback(ch, method, properties, body):
         exit(1)
     if not len(profile_list):
         return 0
-    name = profile_list[0]['name'] + "_" + profile_list[0]['type'] + "_" + str(jid) + "_" + str(random.randint(1, 1000000))
+    name = profile_list[0]['name'] + "_" + profile_list[0]['type'] + "_" + str(jid)
     name = name.replace(" ", "")
     create_supervisord_config(ip, name, jid, thomson_host)
     get_supervisord(name)
